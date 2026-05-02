@@ -1,0 +1,279 @@
+# Instincts generated from https://github.com/saintdesignedthis/awesome-design-md
+# Generated: 2026-05-02T09:36:52.036Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: awesome-design-md-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Commit Length
+
+## Action
+
+Keep commit messages concise (~39 characters)
+
+## Evidence
+
+- Average commit message length: 39 chars
+- Based on 1 commits
+
+---
+id: awesome-design-md-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: awesome-design-md-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: awesome-design-md-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: awesome-design-md-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: awesome-design-md-instinct-file-naming
+trigger: "When creating a new file"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct File Naming
+
+## Action
+
+Name the file using PascalCase
+
+## Evidence
+
+- Pattern in namingConventions.files
+- Example: DESIGN.md
+
+---
+id: awesome-design-md-instinct-function-naming
+trigger: "When defining a function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Function Naming
+
+## Action
+
+Use camelCase for the function name
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: awesome-design-md-instinct-class-naming
+trigger: "When defining a class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Class Naming
+
+## Action
+
+Use PascalCase for the class name
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: awesome-design-md-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for the constant name
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: awesome-design-md-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle
+
+---
+id: awesome-design-md-instinct-export-style
+trigger: "When exporting from a module"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: awesome-design-md-instinct-commit-format
+trigger: "When writing a commit message"
+confidence: 0.8
+domain: git
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Commit Format
+
+## Action
+
+Write a freeform message without a prefix, describing the change concisely
+
+## Evidence
+
+- Example commit: add Titan Multiplast Smržovka DESIGN.md
+- Pattern: no prefixes
+
+---
+id: awesome-design-md-instinct-commit-length
+trigger: "When composing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Commit Length
+
+## Action
+
+Keep the commit message concise, around 40 characters
+
+## Evidence
+
+- Average commit length: 39
+
+---
+id: awesome-design-md-instinct-test-location
+trigger: "When adding tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: saintdesignedthis/awesome-design-md
+---
+
+# Awesome Design Md Instinct Test Location
+
+## Action
+
+Place test files in a separate folder from source files
+
+## Evidence
+
+- testLocation: separate
+

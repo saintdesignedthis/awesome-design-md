@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titan Multiplast — Design Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #0B4EA2; --primary-hover: #0A4390;
+    --accent: #E8640D; --accent-hover: #CC5509;
+    --ink: #1A2332; --body: #404E5C; --muted: #6B7A8D;
+    --hairline: #DDE3EA; --hairline-soft: #EEF1F5;
+    --canvas: #FFFFFF; --canvas-alt: #F4F7FB;
+    --canvas-dark: #0A2540; --canvas-dark-el: #0D2E4F;
+    --on-dark: #FFFFFF; --on-dark-muted: #9AAFCA;
+    --font: 'Open Sans', system-ui, -apple-system, sans-serif;
+    --r-md: 4px; --r-sm: 3px; --r-card: 4px;
+  }
+  body { font-family: var(--font); background: var(--canvas); color: var(--ink); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 56px 0; }
+  .section--alt { background: var(--canvas-alt); }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--hairline); }
+  .section-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+  .divider { height: 4px; background: var(--accent); width: 48px; border-radius: 2px; margin: 12px 0 28px; }
+
+  /* TOP BAR */
+  .top-bar { background: var(--canvas-dark); color: var(--on-dark); font-size: 12px; height: 36px; display: flex; align-items: center; }
+  .top-bar__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 20px; width: 100%; }
+  .top-bar a { color: var(--on-dark-muted); text-decoration: none; }
+  .top-bar__social { margin-left: auto; display: flex; gap: 14px; }
+  .top-bar__social a { color: var(--on-dark-muted); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+
+  /* NAV */
+  .nav { background: var(--canvas); border-bottom: 1px solid var(--hairline); box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100; }
+  .nav__inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 68px; display: flex; align-items: center; gap: 4px; }
+  .nav__logo { display: flex; align-items: center; gap: 10px; margin-right: 20px; flex-shrink: 0; }
+  .nav__logo-icon { width: 34px; height: 34px; display: flex; align-items: flex-end; gap: 3px; }
+  .nav__logo-icon span { display: block; width: 7px; background: var(--primary); border-radius: 1px; }
+  .nav__logo-icon span:nth-child(1) { height: 10px; }
+  .nav__logo-icon span:nth-child(2) { height: 16px; }
+  .nav__logo-icon span:nth-child(3) { height: 26px; }
+  .nav__logo-icon span:nth-child(4) { height: 20px; }
+  .nav__logo-text { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; line-height: 1.1; }
+  .nav__logo-text span { color: var(--primary); }
+  .nav__logo-sub { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .nav__links { display: flex; align-items: center; gap: 0; flex: 1; }
+  .nav__link { font-size: 13px; font-weight: 600; color: var(--body); padding: 6px 12px; border-radius: var(--r-md); text-decoration: none; white-space: nowrap; }
+  .nav__link:hover, .nav__link--active { color: var(--primary); }
+  .nav__cta { margin-left: auto; background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; padding: 9px 18px; border-radius: var(--r-md); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+
+  /* HERO */
+  .hero { position: relative; min-height: 500px; display: flex; align-items: center; overflow: hidden; background: var(--canvas-dark); }
+  .hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.45; }
+  .hero__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,37,64,0.92) 0%, rgba(10,37,64,0.7) 55%, rgba(10,37,64,0.3) 100%); }
+  .hero__inner { max-width: 1200px; margin: 0 auto; padding: 80px 24px; position: relative; z-index: 1; }
+  .hero__badge { display: inline-block; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 4px 10px; border-radius: var(--r-sm); margin-bottom: 20px; }
+  .hero__title { font-size: clamp(30px, 5vw, 48px); font-weight: 700; line-height: 1.1; letter-spacing: -0.5px; color: var(--on-dark); margin-bottom: 16px; max-width: 600px; }
+  .hero__title em { font-style: normal; color: #5B9EE8; }
+  .hero__sub { font-size: 15px; line-height: 1.7; color: var(--on-dark-muted); margin-bottom: 28px; max-width: 500px; }
+  .hero__actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero__stats { display: flex; gap: 36px; margin-top: 44px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.12); flex-wrap: wrap; }
+  .hero__stat-num { font-size: 28px; font-weight: 700; color: var(--on-dark); line-height: 1; }
+  .hero__stat-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--on-dark-muted); margin-top: 4px; }
+
+  /* BUTTONS */
+  .btn-primary { background: var(--accent); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.5px; padding: 11px 24px; height: 44px; border-radius: var(--r-md); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+  .btn-outline-white { background: transparent; color: var(--on-dark); font-family: var(--font); font-size: 14px; font-weight: 700; padding: 9px 22px; height: 44px; border-radius: var(--r-md); border: 2px solid rgba(255,255,255,0.5); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+  .btn-secondary { background: transparent; color: var(--primary); font-family: var(--font); font-size: 14px; font-weight: 700; padding: 9px 22px; height: 44px; border-radius: var(--r-md); border: 2px solid var(--primary); cursor: pointer; display: inline-flex; align-items: center; text-decoration: none; }
+
+  /* BREADCRUMB */
+  .breadcrumb { background: var(--canvas-alt); padding: 10px 0; font-size: 12px; color: var(--muted); }
+  .breadcrumb a { color: var(--primary); text-decoration: none; }
+  .breadcrumb span { margin: 0 5px; color: var(--hairline); }
+
+  /* CATEGORY CARDS */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .cat-card { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-card); overflow: hidden; transition: box-shadow 0.2s; }
+  .cat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+  .cat-card__img { height: 180px; position: relative; overflow: hidden; background: var(--canvas-dark); }
+  .cat-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+  .cat-card:hover .cat-card__img img { transform: scale(1.04); }
+  .cat-card__img-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(10,37,64,0.55) 100%); }
+  .cat-card__badge { position: absolute; top: 10px; left: 10px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: var(--r-sm); z-index: 1; }
+  .cat-card__body { padding: 20px; }
+  .cat-card__title { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+  .cat-card__desc { font-size: 13px; color: var(--body); line-height: 1.6; margin-bottom: 14px; }
+  .cat-card__link { font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+
+  /* STAT BAND */
+  .stat-band { background: var(--primary); padding: 36px 0; }
+  .stat-band__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat-block { padding: 0 24px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15); }
+  .stat-block:last-child { border-right: none; }
+  .stat-block__num { font-size: 32px; font-weight: 700; color: #fff; line-height: 1; }
+  .stat-block__label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 6px; }
+
+  /* PRODUCT GRID */
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .product-card { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-card); overflow: hidden; transition: box-shadow 0.2s; }
+  .product-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .product-card__thumb { height: 120px; overflow: hidden; background: var(--canvas-alt); }
+  .product-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .product-card__body { padding: 14px; }
+  .product-card__name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .product-card__meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+  .product-card__link { font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+
+  /* ABOUT BAND */
+  .about-band { background: var(--canvas-dark); padding: 64px 0; }
+  .about-band__inner { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .about-band__img { border-radius: var(--r-card); overflow: hidden; aspect-ratio: 16/10; }
+  .about-band__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-band__label { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-dark-muted); margin-bottom: 16px; }
+  .about-band__title { font-size: clamp(24px, 3vw, 36px); font-weight: 700; color: var(--on-dark); line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.3px; }
+  .about-band__body { font-size: 15px; color: var(--on-dark-muted); line-height: 1.7; margin-bottom: 28px; }
+
+  /* SERVICES */
+  .service-card { background: var(--canvas-alt); border-radius: var(--r-card); padding: 22px; }
+  .service-card__icon { width: 38px; height: 38px; background: var(--primary); border-radius: var(--r-md); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; margin-bottom: 14px; }
+  .service-card__title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .service-card__desc { font-size: 13px; color: var(--body); line-height: 1.6; }
+
+  /* VIDEO SECTION */
+  .video-thumb { position: relative; border-radius: var(--r-card); overflow: hidden; aspect-ratio: 16/9; cursor: pointer; }
+  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-thumb__overlay { position: absolute; inset: 0; background: rgba(10,37,64,0.4); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .video-thumb:hover .video-thumb__overlay { background: rgba(10,37,64,0.2); }
+  .video-thumb__play { width: 54px; height: 54px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .video-thumb__play::after { content: ''; border-left: 18px solid #fff; border-top: 11px solid transparent; border-bottom: 11px solid transparent; margin-left: 4px; }
+  .video-thumb__label { position: absolute; bottom: 12px; left: 14px; right: 14px; font-size: 13px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+
+  /* COLOR PALETTE */
+  .palette { display: flex; flex-wrap: wrap; gap: 10px; }
+  .swatch { border-radius: var(--r-md); overflow: hidden; flex: 0 0 130px; }
+  .swatch__color { height: 52px; }
+  .swatch__info { padding: 8px 10px; background: var(--canvas); border: 1px solid var(--hairline); border-top: none; border-radius: 0 0 var(--r-md) var(--r-md); }
+  .swatch__name { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .swatch__hex { font-size: 10px; color: var(--muted); font-family: monospace; margin-top: 1px; }
+
+  /* TYPOGRAPHY */
+  .type-row { padding: 14px 0; border-bottom: 1px solid var(--hairline-soft); display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+  .type-row:last-child { border-bottom: none; }
+  .type-row__meta { font-size: 10px; color: var(--muted); font-family: monospace; min-width: 175px; flex-shrink: 0; }
+
+  /* BADGES */
+  .badge { background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 3px 8px; border-radius: var(--r-sm); display: inline-block; }
+  .badge--accent { background: var(--accent); }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 10px 0; }
+
+  /* INPUTS */
+  .text-input { background: var(--canvas); color: var(--ink); font-family: var(--font); font-size: 14px; padding: 10px 14px; height: 42px; border-radius: var(--r-md); border: 1px solid var(--hairline); outline: none; min-width: 180px; }
+  .text-input--focus { border-color: var(--primary); }
+  .text-input--error { border-color: #C0392B; }
+  .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* FOOTER */
+  .footer { background: var(--canvas-dark); padding: 44px 0 20px; }
+  .footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+  .footer__brand { color: var(--on-dark-muted); font-size: 13px; line-height: 1.7; }
+  .footer__brand strong { color: var(--on-dark); font-size: 14px; font-weight: 700; display: block; margin-bottom: 10px; }
+  .footer__col h4 { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-dark-muted); margin-bottom: 14px; }
+  .footer__col a { display: block; font-size: 13px; color: var(--on-dark-muted); text-decoration: none; margin-bottom: 7px; transition: color 0.15s; }
+  .footer__col a:hover { color: var(--on-dark); }
+  .footer__bottom { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--canvas-dark-el); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px; color: var(--on-dark-muted); }
+
+  /* DS HEADER */
+  .ds-header { background: var(--canvas-dark); padding: 20px 0; border-top: 3px solid var(--accent); }
+  .ds-header p { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-dark-muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .stat-band__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .stat-block { border-right: none; padding: 12px; }
+    .footer__grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .about-band__inner { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .nav__links { display: none; }
+    .hero__title { font-size: 28px; }
+    .hero__stats { gap: 20px; }
+    .footer__grid { grid-template-columns: 1fr; }
+    .top-bar__inner { font-size: 11px; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar__inner">
+    <span>📞 +420 483 360 060</span>
+    <a href="#">info@titan-multiplast.cz</a>
+    <div class="top-bar__social">
+      <a href="#">Facebook</a>
+      <a href="#">YouTube</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <div class="nav__inner">
+    <div class="nav__logo">
+      <div class="nav__logo-icon">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div>
+        <div class="nav__logo-text">TITAN <span>Multiplast</span></div>
+        <div class="nav__logo-sub">Smržovka</div>
+      </div>
+    </div>
+    <div class="nav__links">
+      <a href="#" class="nav__link nav__link--active">Produkty</a>
+      <a href="#" class="nav__link">Služby</a>
+      <a href="#" class="nav__link">O nás</a>
+      <a href="#" class="nav__link">Reference</a>
+      <a href="#" class="nav__link">Kontakt</a>
+    </div>
+    <a href="#" class="nav__cta">E-shop →</a>
+  </div>
+</nav>
+
+<!-- HERO — thumbnail from their 2021 promo video -->
+<section class="hero">
+  <img class="hero__img"
+       src="https://img.youtube.com/vi/Ld3T5t_6uWo/maxresdefault.jpg"
+       alt="Titan Multiplast Plastcentrum"
+       onerror="this.src='https://img.youtube.com/vi/Ld3T5t_6uWo/hqdefault.jpg'">
+  <div class="hero__overlay"></div>
+  <div class="hero__inner">
+    <div class="hero__badge">WebTop100 2018 — 1. místo B2B</div>
+    <h1 class="hero__title">Vaše nápady,<br><em>naše plasty!</em></h1>
+    <p class="hero__sub">Největší skladová zásoba plastových desek a profilů ve střední Evropě. Polykarbonát, plexisklo a technické plasty pro stavebnictví, průmysl i reklamu.</p>
+    <div class="hero__actions">
+      <a href="#" class="btn-primary">Nezávazná poptávka</a>
+      <a href="#" class="btn-outline-white">Naše produkty</a>
+    </div>
+    <div class="hero__stats">
+      <div><div class="hero__stat-num">1 100+</div><div class="hero__stat-label">Tun skladem</div></div>
+      <div><div class="hero__stat-num">450M</div><div class="hero__stat-label">CZK obrat</div></div>
+      <div><div class="hero__stat-num">125</div><div class="hero__stat-label">Zaměstnanců</div></div>
+      <div><div class="hero__stat-num">#1</div><div class="hero__stat-label">WebTop100 B2B</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="#">Domů</a><span>/</span>
+    <a href="#">Produkty</a><span>/</span>
+    <span style="color:var(--ink)">Stavebnictví</span>
+  </div>
+</div>
+
+<!-- CATEGORY CARDS — thumbnails from their YouTube videos -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Katalog produktů</p>
+    <h2 class="section-title">Vyberte vaše odvětví</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+
+      <!-- Construction — pergola/polycarbonate installation video -->
+      <div class="cat-card">
+        <div class="cat-card__img">
+          <img src="https://img.youtube.com/vi/-W1wIc7PzjM/maxresdefault.jpg"
+               alt="Stavebnictví — polykarbonát"
+               onerror="this.src='https://img.youtube.com/vi/-W1wIc7PzjM/hqdefault.jpg'">
+          <div class="cat-card__img-overlay"></div>
+          <span class="cat-card__badge">Stavebnictví</span>
+        </div>
+        <div class="cat-card__body">
+          <div class="cat-card__title">Stavebnictví</div>
+          <div class="cat-card__desc">Polykarbonátové desky, plexisklo, protihlukové stěny, bazény a sportovní povrchy.</div>
+          <a href="#" class="cat-card__link">Zobrazit produkty →</a>
+        </div>
+      </div>
+
+      <!-- Industry — PLASTCENTRUM facility tour -->
+      <div class="cat-card">
+        <div class="cat-card__img">
+          <img src="https://img.youtube.com/vi/rj7Cv_ndiyU/maxresdefault.jpg"
+               alt="Průmysl — Plastcentrum sklad"
+               onerror="this.src='https://img.youtube.com/vi/rj7Cv_ndiyU/hqdefault.jpg'">
+          <div class="cat-card__img-overlay"></div>
+          <span class="cat-card__badge">Průmysl</span>
+        </div>
+        <div class="cat-card__body">
+          <div class="cat-card__title">Průmysl a strojírenství</div>
+          <div class="cat-card__desc">Technologické nádrže, svařovací stroje, ochranné kryty a automotive komponenty.</div>
+          <a href="#" class="cat-card__link">Zobrazit produkty →</a>
+        </div>
+      </div>
+
+      <!-- Advertising — PLASTCENTRUM Jizera mountains -->
+      <div class="cat-card">
+        <div class="cat-card__img">
+          <img src="https://img.youtube.com/vi/XJtXCxhd6OU/maxresdefault.jpg"
+               alt="Reklama a design"
+               onerror="this.src='https://img.youtube.com/vi/XJtXCxhd6OU/hqdefault.jpg'">
+          <div class="cat-card__img-overlay"></div>
+          <span class="cat-card__badge">Reklama</span>
+        </div>
+        <div class="cat-card__body">
+          <div class="cat-card__title">Reklama a design</div>
+          <div class="cat-card__desc">Plexisklo a transparentní materiály pro reklamní výrobu, POS displeje a instalace.</div>
+          <a href="#" class="cat-card__link">Zobrazit produkty →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<div class="stat-band">
+  <div class="container">
+    <div class="stat-band__grid">
+      <div class="stat-block"><div class="stat-block__num">1 100+</div><div class="stat-block__label">Tun skladem</div></div>
+      <div class="stat-block"><div class="stat-block__num">3</div><div class="stat-block__label">Průmyslová odvětví</div></div>
+      <div class="stat-block"><div class="stat-block__num">125</div><div class="stat-block__label">Zaměstnanců</div></div>
+      <div class="stat-block"><div class="stat-block__num">#1</div><div class="stat-block__label">WebTop100 B2B 2018</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT GRID — video thumbnails as product images -->
+<section class="section section--alt">
+  <div class="container">
+    <p class="section-label">Produktový katalog — Stavebnictví</p>
+    <h2 class="section-title">Polykarbonátové desky</h2>
+    <div class="divider"></div>
+    <div class="grid-4">
+      <div class="product-card">
+        <div class="product-card__thumb">
+          <img src="https://img.youtube.com/vi/-W1wIc7PzjM/mqdefault.jpg" alt="Plný polykarbonát">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Plný polykarbonát</div>
+          <div class="product-card__meta">Kompaktní · UV ochrana · 3–25 mm</div>
+          <a href="#" class="product-card__link">Více informací →</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__thumb">
+          <img src="https://img.youtube.com/vi/9cT8Ak0lqxg/mqdefault.jpg" alt="Dutinkový polykarbonát">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Dutinkový polykarbonát</div>
+          <div class="product-card__meta">Tepelná izolace · 4–16 mm</div>
+          <a href="#" class="product-card__link">Více informací →</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__thumb">
+          <img src="https://img.youtube.com/vi/Gt5p6BfUln0/mqdefault.jpg" alt="Plexisklo">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Plexisklo</div>
+          <div class="product-card__meta">PMMA · Optická čistota · 2–50 mm</div>
+          <a href="#" class="product-card__link">Více informací →</a>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-card__thumb">
+          <img src="https://img.youtube.com/vi/XJtXCxhd6OU/mqdefault.jpg" alt="Technické plasty">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__name">Technické plasty</div>
+          <div class="product-card__meta">PA · PE · POM · PP desky a tyče</div>
+          <a href="#" class="product-card__link">Více informací →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT BAND — PLASTCENTRUM facility -->
+<section class="about-band">
+  <div class="container">
+    <div class="about-band__inner">
+      <div>
+        <div class="about-band__label">O nás</div>
+        <div class="about-band__title">Plastcentrum na úpatí Jizerských hor</div>
+        <div class="about-band__body">Moderní areál PLASTCENTRA v Smržovce disponuje stabilním skladem, výrobními a administrativními prostory s výkonným obráběcím centrem. Od roku 2023 provozujeme největší obráběcí centrum plastů v ČR.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a href="#" class="btn-primary">Kontaktujte nás</a>
+          <a href="#" class="btn-outline-white" style="border-color:rgba(255,255,255,0.4);color:var(--on-dark-muted)">O nás →</a>
+        </div>
+      </div>
+      <div class="about-band__img">
+        <img src="https://img.youtube.com/vi/XJtXCxhd6OU/maxresdefault.jpg"
+             alt="Plastcentrum Smržovka"
+             onerror="this.src='https://img.youtube.com/vi/XJtXCxhd6OU/hqdefault.jpg'">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Naše služby</p>
+    <h2 class="section-title">Kompletní servis od A do Z</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <div class="service-card">
+        <div class="service-card__icon">⚙</div>
+        <div class="service-card__title">Technologie zpracování</div>
+        <div class="service-card__desc">CNC frézování, řezání vodním paprskem, ohýbání a tvarování plastů dle technické dokumentace.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">🏭</div>
+        <div class="service-card__title">Strojové vybavení</div>
+        <div class="service-card__desc">Moderní strojní park — největší obráběcí centrum plastů v ČR s tolerancemi ±0,1 mm.</div>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">🚚</div>
+        <div class="service-card__title">Doprava a balení</div>
+        <div class="service-card__desc">Vlastní přeprava po ČR a SR, profesionální balení pro bezpečnou dopravu materiálů.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO GALLERY -->
+<section class="section section--alt">
+  <div class="container">
+    <p class="section-label">TITAN v televizi & videa</p>
+    <h2 class="section-title">Video galerie</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <a href="https://www.youtube.com/watch?v=Ld3T5t_6uWo" target="_blank" class="video-thumb" style="text-decoration:none">
+        <img src="https://img.youtube.com/vi/Ld3T5t_6uWo/maxresdefault.jpg"
+             alt="Promo video 2021"
+             onerror="this.src='https://img.youtube.com/vi/Ld3T5t_6uWo/hqdefault.jpg'">
+        <div class="video-thumb__overlay"><div class="video-thumb__play"></div></div>
+        <div class="video-thumb__label">Představení firmy 2021</div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=rj7Cv_ndiyU" target="_blank" class="video-thumb" style="text-decoration:none">
+        <img src="https://img.youtube.com/vi/rj7Cv_ndiyU/maxresdefault.jpg"
+             alt="Areál Plastcentra"
+             onerror="this.src='https://img.youtube.com/vi/rj7Cv_ndiyU/hqdefault.jpg'">
+        <div class="video-thumb__overlay"><div class="video-thumb__play"></div></div>
+        <div class="video-thumb__label">Areál PLASTCENTRA — severní Čechy</div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=Gt5p6BfUln0" target="_blank" class="video-thumb" style="text-decoration:none">
+        <img src="https://img.youtube.com/vi/Gt5p6BfUln0/maxresdefault.jpg"
+             alt="Dodáváme a obrábíme plasty"
+             onerror="this.src='https://img.youtube.com/vi/Gt5p6BfUln0/hqdefault.jpg'">
+        <div class="video-thumb__overlay"><div class="video-thumb__play"></div></div>
+        <div class="video-thumb__label">Dodáváme a obrábíme plasty</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DS HEADER -->
+<div class="ds-header"><div class="container"><p>↓ &nbsp; Design System Reference</p></div></div>
+
+<!-- COLORS -->
+<section class="section section--alt">
+  <div class="container">
+    <p class="section-label">Colors</p>
+    <div class="palette">
+      <div class="swatch"><div class="swatch__color" style="background:#0B4EA2"></div><div class="swatch__info"><div class="swatch__name">primary</div><div class="swatch__hex">#0B4EA2</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#E8640D"></div><div class="swatch__info"><div class="swatch__name">accent</div><div class="swatch__hex">#E8640D</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#1A2332"></div><div class="swatch__info"><div class="swatch__name">ink</div><div class="swatch__hex">#1A2332</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#404E5C"></div><div class="swatch__info"><div class="swatch__name">body</div><div class="swatch__hex">#404E5C</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#6B7A8D"></div><div class="swatch__info"><div class="swatch__name">muted</div><div class="swatch__hex">#6B7A8D</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#DDE3EA;border:1px solid #ccc"></div><div class="swatch__info"><div class="swatch__name">hairline</div><div class="swatch__hex">#DDE3EA</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#FFFFFF;border:1px solid #ccc"></div><div class="swatch__info"><div class="swatch__name">canvas</div><div class="swatch__hex">#FFFFFF</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#F4F7FB;border:1px solid #ccc"></div><div class="swatch__info"><div class="swatch__name">canvas-alt</div><div class="swatch__hex">#F4F7FB</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#0A2540"></div><div class="swatch__info"><div class="swatch__name">canvas-dark</div><div class="swatch__hex">#0A2540</div></div></div>
+      <div class="swatch"><div class="swatch__color" style="background:#9AAFCA"></div><div class="swatch__info"><div class="swatch__name">on-dark-muted</div><div class="swatch__hex">#9AAFCA</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="section">
+  <div class="container">
+    <p class="section-label">Typography — Open Sans</p>
+    <div class="type-row"><div class="type-row__meta">display-xl · 48px/700<br>ls -0.5px</div><div style="font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-0.5px;color:var(--ink)">Vaše nápady</div></div>
+    <div class="type-row"><div class="type-row__meta">display-lg · 36px/700<br>ls -0.3px</div><div style="font-size:clamp(22px,4vw,36px);font-weight:700;letter-spacing:-0.3px;color:var(--ink)">Polykarbonátové desky</div></div>
+    <div class="type-row"><div class="type-row__meta">display-md · 28px/600</div><div style="font-size:28px;font-weight:600;color:var(--ink)">Stavebnictví & Průmysl</div></div>
+    <div class="type-row"><div class="type-row__meta">title-lg · 22px/600</div><div style="font-size:22px;font-weight:600;color:var(--ink)">Technologie zpracování</div></div>
+    <div class="type-row"><div class="type-row__meta">title-md · 18px/600</div><div style="font-size:18px;font-weight:600;color:var(--ink)">Plný polykarbonát</div></div>
+    <div class="type-row"><div class="type-row__meta">body-lg · 16px/400<br>lh 1.65</div><div style="font-size:16px;color:var(--body);max-width:480px;line-height:1.65">Titan Multiplast disponuje jednou z největších skladových zásob plastových desek ve střední Evropě.</div></div>
+    <div class="type-row"><div class="type-row__meta">label-uppercase · 11px/700<br>ls 1.2px</div><div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)">Stavebnictví · Průmysl · Reklama</div></div>
+    <div class="type-row"><div class="type-row__meta">button · 14px/700<br>ls 0.5px</div><div style="font-size:14px;font-weight:700;letter-spacing:0.5px;color:var(--ink)">Nezávazná poptávka</div></div>
+  </div>
+</section>
+
+<!-- BUTTONS & CONTROLS -->
+<section class="section section--alt">
+  <div class="container">
+    <p class="section-label">Buttons & Controls</p>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:11px;color:var(--muted);min-width:140px">button-primary</span>
+        <button class="btn-primary">Nezávazná poptávka</button>
+        <button class="btn-primary" style="background:var(--accent-hover)">Hover</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:11px;color:var(--muted);min-width:140px">button-secondary</span>
+        <button class="btn-secondary">Více informací</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--canvas-dark);padding:16px;border-radius:var(--r-md)">
+        <span style="font-size:11px;color:var(--on-dark-muted);min-width:140px">button-outline-white</span>
+        <button class="btn-outline-white">Naše produkty</button>
+      </div>
+      <div>
+        <span style="font-size:11px;color:var(--muted);display:block;margin-bottom:10px">Badges</span>
+        <div class="badge-row">
+          <span class="badge">Stavebnictví</span>
+          <span class="badge">Průmysl</span>
+          <span class="badge">Reklama</span>
+          <span class="badge badge--accent">Novinka</span>
+          <span class="badge badge--accent">Akce</span>
+        </div>
+      </div>
+      <div>
+        <span style="font-size:11px;color:var(--muted);display:block;margin-bottom:10px">Form Inputs</span>
+        <div class="form-row">
+          <input class="text-input" type="text" placeholder="Vaše jméno">
+          <input class="text-input text-input--focus" type="email" placeholder="E-mail (focus)">
+          <input class="text-input text-input--error" type="text" placeholder="Error state">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <strong>TITAN Multiplast s.r.o.</strong>
+        Jablonecká 1379<br>
+        468 51 Smržovka<br>
+        Czech Republic<br><br>
+        📞 +420 483 360 060<br>
+        ✉ info@titan-multiplast.cz
+      </div>
+      <div class="footer__col">
+        <h4>Produkty</h4>
+        <a href="#">Stavebnictví</a>
+        <a href="#">Průmysl</a>
+        <a href="#">Reklama a design</a>
+        <a href="#">E-shop</a>
+      </div>
+      <div class="footer__col">
+        <h4>Služby</h4>
+        <a href="#">Technologie zpracování</a>
+        <a href="#">Strojové vybavení</a>
+        <a href="#">Doprava a balení</a>
+        <a href="#">Poradenský servis</a>
+      </div>
+      <div class="footer__col">
+        <h4>Společnost</h4>
+        <a href="#">O nás</a>
+        <a href="#">Reference</a>
+        <a href="#">Novinky</a>
+        <a href="#">Kontakt</a>
+        <a href="#">Deutsch (DE)</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2024 TITAN Multiplast s.r.o. Všechna práva vyhrazena.</span>
+      <span>Webdesign by Minion Interactive</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
